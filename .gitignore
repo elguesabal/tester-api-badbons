@@ -1,0 +1,18 @@
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+
+# Pastas de build
+dist/
+build/
+
+# Arquivos de ambiente
+.env
+
+# Jest cache
+jest.cache/
+
+# IDEs e editores
+.vscode/
