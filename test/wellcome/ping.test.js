@@ -1,16 +1,10 @@
-const { api } = require("../index.js");
-
-test("testando aki", async () => {
-	const res = await api.get("/ping?version=1.0.1");
-
-	expect(res.status).toBe(200);
-});
+const { api } = require("../../index.js");
 
 describe("GET /ping", () => {
-	test("Retorna 426 quando 'version' não é passada", async () => {
+	test("Retorna 400 quando 'version' não é passada", async () => {
 		const res = await api.get("/ping");
 
-		expect(res.status).toBe(426);
+		expect(res.status).toBe(400);
 	});
 
 	test("Retorna 426 quando 'version' não está na lista de versões compatíveis", async () => {

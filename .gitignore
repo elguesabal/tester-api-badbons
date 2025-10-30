@@ -16,3 +16,6 @@ jest.cache/
 
 # IDEs e editores
 .vscode/
+
+# Resultados de testes
+coverage/

@@ -1,9 +1,8 @@
 const axios = require("axios");
+require("dotenv").config({ quiet: true });
 
 module.exports.api = axios.create({
-	baseURL: "http://localhost:3000",
-	// baseURL: "https://api-teste-app-badbons.vercel.app",
-	// baseURL: "https://api-badbons-app.onrender.com",
+	baseURL: process.env.URL,
 	timeout: 10000,
 	validateStatus: () => true
 });
