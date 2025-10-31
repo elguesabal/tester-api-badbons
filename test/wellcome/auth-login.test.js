@@ -1,9 +1,53 @@
 const { api } = require("../../index.js");
 
-describe("POST /auth/login", () => { // TESTAR JSON MAL FORMADO // JSON malformado (ex: corpo da requisição não é JSON válido).
+describe("POST /auth/login", () => {
 	expect(process.env.EMAIL).toBeDefined();
 	expect(process.env.PASSWORD).toBeDefined();
 	expect(process.env.TOKEN_NOTIFICATIONS).toBeDefined();
+
+	test("Retorna 200 quando 'tokenNotifications' não é enviado mas email e senha são válidos", async () => {
+		const body = {
+			email: process.env.EMAIL,
+			password: process.env.PASSWORD
+		};
+		const res = await api.post("/auth/login", body);
+
+		expect(res.status).toBe(200);
+	});
+
+	test("Retorna 200 quando 'email', 'password' e 'tokenNotifications' são válidos", async () => {
+		const body = {
+			email: process.env.EMAIL,
+			password: process.env.PASSWORD,
+			tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+		};
+		const res = await api.post("/auth/login", body);
+
+		expect(res.status).toBe(200);
+	});
+
+	test("Retorna 207 quando 'email', 'password' são válidos mas 'tokenNotifications' é inválido", async () => {
+		const body = {
+			email: process.env.EMAIL,
+			password: process.env.PASSWORD,
+			tokenNotifications: "Token inválido"
+		};
+		const res = await api.post("/auth/login", body);
+
+		expect(res.status).toBe(200);
+	});
+
+	test("Retorna 400 quando o body é um JSON malformado", async () => {
+		const body = "{ JSON malformado }";
+		const config = {
+			header: {
+				"Content-Type": "application/json"
+			}
+		};
+		const res = await api.post("/auth/login", body, config);
+
+		expect(res.status).toBe(400);
+	});
 
 	test("Retorna 400 quando o body não é enviado", async () => {
 		const res = await api.post("/auth/login");
@@ -62,25 +106,5 @@ describe("POST /auth/login", () => { // TESTAR JSON MAL FORMADO // JSON malforma
 		const res = await api.post("/auth/login", body);
 
 		expect(res.status).toBe(401);
-	});
-
-	test("Retorna 200 quando 'tokenNotifications' não é enviado mas email e senha são válidos", async () => {
-		const body = {
-			email: process.env.EMAIL,
-			password: process.env.PASSWORD
-		};
-		const res = await api.post("/auth/login", body);
-
-		expect(res.status).toBe(200);
-	});
-
-	test("Retorna 200 quando 'email' e 'password' estão corretos", async () => {
-		const body = {
-			email: process.env.EMAIL,
-			password: process.env.PASSWORD
-		};
-		const res = await api.post("/auth/login", body);
-
-		expect(res.status).toBe(200);
 	});
 });
