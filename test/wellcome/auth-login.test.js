@@ -1,5 +1,20 @@
 const { api } = require("../../index.js");
 
+// toEqual(obj)	Compara exatamente o objeto	expect(res.body).toEqual({ msg: 'ok' })
+// toMatchObject(obj)	Permite comparar parcialmente	expect(res.body).toMatchObject({ msg: 'ok' })
+// toHaveProperty(path, value?)	Verifica se tem uma chave	expect(res.body).toHaveProperty('message', 'Token válido!')
+// expect.any(Type)	Valida o tipo sem se importar com o valor	expect(body).toMatchObject({ accesstoken: expect.any(String) })
+
+/**
+ * @author VAMPETA
+ * @brief ROTA DE LOGIN
+ * @method POST
+ * @route /auth/login
+ * @warning ESSE TESTE NECESSECITA DE 3 VARIAVEIS DE AMBIENTE
+ * @property {string} EMAIL EMAIL DE LOGIN
+ * @property {stirng} PASSWORD SENHA DE USUARIO
+ * @property {string} TOKEN_NOTIFICATIONS TOKEN EXPO USADO PARA ENVIAR NOTIFICACAO
+*/
 describe("POST /auth/login", () => {
 	expect(process.env.EMAIL).toBeDefined();
 	expect(process.env.PASSWORD).toBeDefined();
@@ -13,6 +28,11 @@ describe("POST /auth/login", () => {
 		const res = await api.post("/auth/login", body);
 
 		expect(res.status).toBe(200);
+		expect(res.data).toMatchObject({
+			RefreshToken: expect.any(String),
+			accesstoken: expect.any(String),
+			validToken: false // INFORMANDO VALIDADE DO TOKEN
+		});
 	});
 
 	test("Retorna 200 quando 'email', 'password' e 'tokenNotifications' são válidos", async () => {
