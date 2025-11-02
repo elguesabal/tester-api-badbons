@@ -31,7 +31,7 @@ describe("POST /auth/login", () => {
 		expect(res.data).toMatchObject({
 			RefreshToken: expect.any(String),
 			accesstoken: expect.any(String),
-			validToken: false // INFORMANDO VALIDADE DO TOKEN
+			validToken: false
 		});
 	});
 
@@ -44,6 +44,11 @@ describe("POST /auth/login", () => {
 		const res = await api.post("/auth/login", body);
 
 		expect(res.status).toBe(200);
+		expect(res.data).toMatchObject({
+			RefreshToken: expect.any(String),
+			accesstoken: expect.any(String),
+			validToken: true
+		});
 	});
 
 	test("Retorna 207 quando 'email', 'password' são válidos mas 'tokenNotifications' é inválido", async () => {
@@ -54,7 +59,12 @@ describe("POST /auth/login", () => {
 		};
 		const res = await api.post("/auth/login", body);
 
-		expect(res.status).toBe(200);
+		expect(res.status).toBe(207);
+		expect(res.data).toMatchObject({
+			RefreshToken: expect.any(String),
+			accesstoken: expect.any(String),
+			validToken: false
+		});
 	});
 
 	test("Retorna 400 quando o body é um JSON malformado", async () => {
@@ -73,6 +83,7 @@ describe("POST /auth/login", () => {
 		const res = await api.post("/auth/login");
 
 		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
 	});
 
 	test("Retorna 400 quando 'email' não é enviado", async () => {
@@ -83,6 +94,7 @@ describe("POST /auth/login", () => {
 		const res = await api.post("/auth/login", body);
 
 		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
 	});
 
 	test("Retorna 400 quando 'password' não é enviado", async () => {
@@ -93,6 +105,7 @@ describe("POST /auth/login", () => {
 		const res = await api.post("/auth/login", body);
 
 		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
 	});
 
 	test("Retorna 401 quando 'email' não está cadastrado no sistema", async () => {
@@ -104,6 +117,7 @@ describe("POST /auth/login", () => {
 		const res = await api.post("/auth/login", body);
 
 		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
 	});
 
 	test("Retorna 401 quando 'email' tem um formato invalido", async () => {
@@ -115,6 +129,7 @@ describe("POST /auth/login", () => {
 		const res = await api.post("/auth/login", body);
 
 		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
 	});
 
 	test("Retorna 401 quando 'password' não é valido", async () => {
@@ -126,5 +141,6 @@ describe("POST /auth/login", () => {
 		const res = await api.post("/auth/login", body);
 
 		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
 	});
 });
