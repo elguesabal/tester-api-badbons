@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --verbose --coverage",
     "/ping": "jest --verbose test/wellcome/ping.test.js",
-    "/auth/login": "jest test/wellcome/auth-login.test.js --verbose"
+    "/auth/login": "jest --verbose test/wellcome/auth-login.test.js"
   },
   "keywords": [],
   "author": "",

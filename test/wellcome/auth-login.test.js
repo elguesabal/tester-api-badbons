@@ -1,10 +1,5 @@
 const { api } = require("../../index.js");
 
-// toEqual(obj)	Compara exatamente o objeto	expect(res.body).toEqual({ msg: 'ok' })
-// toMatchObject(obj)	Permite comparar parcialmente	expect(res.body).toMatchObject({ msg: 'ok' })
-// toHaveProperty(path, value?)	Verifica se tem uma chave	expect(res.body).toHaveProperty('message', 'Token válido!')
-// expect.any(Type)	Valida o tipo sem se importar com o valor	expect(body).toMatchObject({ accesstoken: expect.any(String) })
-
 /**
  * @author VAMPETA
  * @brief ROTA DE LOGIN
