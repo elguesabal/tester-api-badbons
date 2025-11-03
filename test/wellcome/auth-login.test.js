@@ -15,7 +15,7 @@ describe("POST /auth/login", () => {
 	expect(process.env.PASSWORD).toBeDefined();
 	expect(process.env.TOKEN_NOTIFICATIONS).toBeDefined();
 
-	test("Retorna 200 quando 'tokenNotifications' não é enviado mas email e senha são válidos", async () => {
+	test("Retorna 200 quando 'tokenNotifications' não é enviado mas 'email' e 'password' são válidos", async () => {
 		const body = {
 			email: process.env.EMAIL,
 			password: process.env.PASSWORD
@@ -115,7 +115,7 @@ describe("POST /auth/login", () => {
 		expect(res.data).toBe("Unauthorized");
 	});
 
-	test("Retorna 401 quando 'email' tem um formato invalido", async () => {
+	test("Retorna 401 quando 'email' tem um formato inválido", async () => {
 		const body = {
 			email: "Email inválido",
 			password: process.env.PASSWORD,
