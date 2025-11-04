@@ -43,3 +43,6 @@ Comando usado para testar apenas uma rota específica.
 - Welcome
     - /ping
     - /auth/login
+
+- Home
+    - /user/treinos
