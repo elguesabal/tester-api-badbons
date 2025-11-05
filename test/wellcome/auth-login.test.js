@@ -15,21 +15,6 @@ describe("POST /auth/login", () => {
 	expect(process.env.PASSWORD).toBeDefined();
 	expect(process.env.TOKEN_NOTIFICATIONS).toBeDefined();
 
-	test("Retorna 200 quando 'tokenNotifications' não é enviado mas 'email' e 'password' são válidos", async () => {
-		const body = {
-			email: process.env.EMAIL,
-			password: process.env.PASSWORD
-		};
-		const res = await api.post("/auth/login", body);
-
-		expect(res.status).toBe(200);
-		expect(res.data).toMatchObject({
-			RefreshToken: expect.any(String),
-			accesstoken: expect.any(String),
-			validToken: false
-		});
-	});
-
 	test("Retorna 200 quando 'email', 'password' e 'tokenNotifications' são válidos", async () => {
 		const body = {
 			email: process.env.EMAIL,
@@ -43,6 +28,21 @@ describe("POST /auth/login", () => {
 			RefreshToken: expect.any(String),
 			accesstoken: expect.any(String),
 			validToken: true
+		});
+	});
+
+	test("Retorna 200 quando 'tokenNotifications' não é enviado mas 'email' e 'password' são válidos", async () => {
+		const body = {
+			email: process.env.EMAIL,
+			password: process.env.PASSWORD
+		};
+		const res = await api.post("/auth/login", body);
+
+		expect(res.status).toBe(200);
+		expect(res.data).toMatchObject({
+			RefreshToken: expect.any(String),
+			accesstoken: expect.any(String),
+			validToken: false
 		});
 	});
 

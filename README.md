@@ -1,6 +1,6 @@
 # Tester API Badbons
 
-Projeto criado para testar as rotas da API Badbons
+Projeto criado para testar as rotas da API Badbons consforme a documentação [RFC 6750](https://datatracker.ietf.org/doc/html/rfc6750) e [RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110). É possivel tirar algumas dúvidas simples usando a documentação mais resumida e direta do [MDN Web Docs (Mozilla)](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Reference/Status).
 
 ## 📦 Instalação
 
@@ -43,6 +43,9 @@ Comando usado para testar apenas uma rota específica.
 - Welcome
     - /ping
     - /auth/login
+
+- Profile
+    - /swap-email
 
 - Home
     - /user/treinos

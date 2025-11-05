@@ -7,6 +7,7 @@
     "test": "jest --verbose --coverage",
     "/ping": "jest --verbose test/wellcome/ping.test.js",
     "/auth/login": "jest --verbose test/wellcome/auth-login.test.js",
+    "/swap-email": "jest --verbose test/profile/swap-email.test.js",
     "/user/treinos": "jest --verbose test/home/user-treinos.test.js"
   },
   "keywords": [],

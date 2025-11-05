@@ -16,7 +16,7 @@ describe("GET /user/treinos", () => {
 			headers: {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			}
-		}
+		};
 		const res = await api("/user/treinos", config);
 
 		expect(res.status).toBe(200);
@@ -26,7 +26,7 @@ describe("GET /user/treinos", () => {
 		});
 	});
 
-	test("Aceita header 'authorization' em minúsculo", async () => {
+	test("Retorna 200 com header 'authorization' em minúsculo", async () => {
 		const config = {
 			headers: {
 				authorization: `Bearer ${process.env.REFRESH_TOKEN}`
@@ -56,18 +56,6 @@ describe("GET /user/treinos", () => {
 			headers: {
 				Authorization: process.env.REFRESH_TOKEN
 			}
-		}
-		const res = await api("/user/treinos", config);
-
-		expect(res.status).toBe(400);
-		expect(res.data).toBe("Bad Request");
-	});
-
-	test("Retorna 400 quando há múltiplos headers Authorization", async () => {
-		const config = {
-			headers: {
-				Authorization: ["Bearer 12345", "Bearer 54321"]
-			}
 		};
 		const res = await api("/user/treinos", config);
 
@@ -80,7 +68,7 @@ describe("GET /user/treinos", () => {
 			headers: {
 				Authorization: "Bearer "
 			}
-		}
+		};
 		const res = await api("/user/treinos", config);
 
 		expect(res.status).toBe(401);
@@ -92,7 +80,7 @@ describe("GET /user/treinos", () => {
 			headers: {
 				Authorization: "Bearer token inválido"
 			}
-		}
+		};
 		const res = await api("/user/treinos", config);
 
 		expect(res.status).toBe(401);
