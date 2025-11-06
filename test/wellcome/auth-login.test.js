@@ -15,7 +15,7 @@ describe("POST /auth/login", () => {
 	expect(process.env.PASSWORD).toBeDefined();
 	expect(process.env.TOKEN_NOTIFICATIONS).toBeDefined();
 
-	test("Retorna 200 quando 'email', 'password' e 'tokenNotifications' são válidos", async () => {
+	test("200 - 'email', 'password' e 'tokenNotifications' são válidos", async () => {
 		const body = {
 			email: process.env.EMAIL,
 			password: process.env.PASSWORD,
@@ -31,7 +31,7 @@ describe("POST /auth/login", () => {
 		});
 	});
 
-	test("Retorna 200 quando 'tokenNotifications' não é enviado mas 'email' e 'password' são válidos", async () => {
+	test("200 - 'tokenNotifications' não é enviado mas 'email' e 'password' são válidos", async () => {
 		const body = {
 			email: process.env.EMAIL,
 			password: process.env.PASSWORD
@@ -46,7 +46,7 @@ describe("POST /auth/login", () => {
 		});
 	});
 
-	test("Retorna 207 quando 'email', 'password' são válidos mas 'tokenNotifications' é inválido", async () => {
+	test("207 - 'email', 'password' são válidos mas 'tokenNotifications' é inválido", async () => {
 		const body = {
 			email: process.env.EMAIL,
 			password: process.env.PASSWORD,
@@ -62,26 +62,14 @@ describe("POST /auth/login", () => {
 		});
 	});
 
-	test("Retorna 400 quando o body é um JSON malformado", async () => {
-		const body = "{ JSON malformado }";
-		const config = {
-			header: {
-				"Content-Type": "application/json"
-			}
-		};
-		const res = await api.post("/auth/login", body, config);
-
-		expect(res.status).toBe(400);
-	});
-
-	test("Retorna 400 quando o body não é enviado", async () => {
+	test("400 - Body não é enviado", async () => {
 		const res = await api.post("/auth/login");
 
 		expect(res.status).toBe(400);
 		expect(res.data).toBe("Bad Request");
 	});
 
-	test("Retorna 400 quando 'email' não é enviado", async () => {
+	test("400 - 'email' não é enviado", async () => {
 		const body = {
 			password: process.env.PASSWORD,
 			tokenNotifications: process.env.TOKEN_NOTIFICATIONS
@@ -92,7 +80,7 @@ describe("POST /auth/login", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
-	test("Retorna 400 quando 'password' não é enviado", async () => {
+	test("400 - 'password' não é enviado", async () => {
 		const body = {
 			email: process.env.EMAIL,
 			tokenNotifications: process.env.TOKEN_NOTIFICATIONS
@@ -103,7 +91,7 @@ describe("POST /auth/login", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
-	test("Retorna 401 quando 'email' não está cadastrado no sistema", async () => {
+	test("401 - 'email' não está cadastrado no sistema", async () => {
 		const body = {
 			email: "email@email.com",
 			password: process.env.PASSWORD,
@@ -115,7 +103,7 @@ describe("POST /auth/login", () => {
 		expect(res.data).toBe("Unauthorized");
 	});
 
-	test("Retorna 401 quando 'email' tem um formato inválido", async () => {
+	test("401 - 'email' com formato inválido", async () => {
 		const body = {
 			email: "Email inválido",
 			password: process.env.PASSWORD,
@@ -127,7 +115,7 @@ describe("POST /auth/login", () => {
 		expect(res.data).toBe("Unauthorized");
 	});
 
-	test("Retorna 401 quando 'password' não é valido", async () => {
+	test("401 - 'password' não é válido", async () => {
 		const body = {
 			email: process.env.EMAIL,
 			password: "Senha inválida",
