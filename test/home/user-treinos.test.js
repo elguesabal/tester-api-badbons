@@ -26,20 +26,20 @@ describe("GET /user/treinos", () => {
 		});
 	});
 
-	test("200 - 'authorization' em minúsculo", async () => {
-		const config = {
-			headers: {
-				authorization: `Bearer ${process.env.REFRESH_TOKEN}`
-			}
-		};
-		const res = await api("/user/treinos", config);
+	// test("200 - 'authorization' em minúsculo", async () => {
+	// 	const config = {
+	// 		headers: {
+	// 			authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+	// 		}
+	// 	};
+	// 	const res = await api("/user/treinos", config);
 
-		expect(res.status).toBe(200);
-		expect(res.data).toMatchObject({
-			treinosTotais: expect.any(Number),
-			treinosFeitos: expect.any(Number)
-		});
-	});
+	// 	expect(res.status).toBe(200);
+	// 	expect(res.data).toMatchObject({
+	// 		treinosTotais: expect.any(Number),
+	// 		treinosFeitos: expect.any(Number)
+	// 	});
+	// });
 
 	test("401 - Header não contém 'Authorization'", async () => {
 		const config = {

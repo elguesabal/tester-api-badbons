@@ -16,12 +16,21 @@ describe("POST /auth/login", () => {
 	expect(process.env.TOKEN_NOTIFICATIONS).toBeDefined();
 
 	test("200 - 'email', 'password' e 'tokenNotifications' são válidos", async () => {
-		const body = {
-			email: process.env.EMAIL,
-			password: process.env.PASSWORD,
-			tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		};
-		const res = await api.post("/auth/login", body);
+		// const body = {
+		// 	email: process.env.EMAIL,
+		// 	password: process.env.PASSWORD,
+		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+		// };
+		// const res = await api.post("/auth/login", body);
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: process.env.PASSWORD,
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
 
 		expect(res.status).toBe(200);
 		expect(res.data).toMatchObject({
@@ -32,11 +41,44 @@ describe("POST /auth/login", () => {
 	});
 
 	test("200 - 'tokenNotifications' não é enviado mas 'email' e 'password' são válidos", async () => {
-		const body = {
-			email: process.env.EMAIL,
-			password: process.env.PASSWORD
-		};
-		const res = await api.post("/auth/login", body);
+		// const body = {
+		// 	email: process.env.EMAIL,
+		// 	password: process.env.PASSWORD
+		// };
+		// const res = await api.post("/auth/login", body);
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(200);
+		expect(res.data).toMatchObject({
+			RefreshToken: expect.any(String),
+			accesstoken: expect.any(String),
+			validToken: false
+		});
+	});
+
+	test("200 - 'email', 'password' são válidos mas 'tokenNotifications' é está vazio", async () => {
+		// const body = {
+		// 	email: process.env.EMAIL,
+		// 	password: process.env.PASSWORD,
+		// 	tokenNotifications: ""
+		// };
+		// const res = await api.post("/auth/login", body);
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: process.env.PASSWORD,
+				tokenNotifications: ""
+			}
+		});
 
 		expect(res.status).toBe(200);
 		expect(res.data).toMatchObject({
@@ -47,12 +89,21 @@ describe("POST /auth/login", () => {
 	});
 
 	test("207 - 'email', 'password' são válidos mas 'tokenNotifications' é inválido", async () => {
-		const body = {
-			email: process.env.EMAIL,
-			password: process.env.PASSWORD,
-			tokenNotifications: "Token inválido"
-		};
-		const res = await api.post("/auth/login", body);
+		// const body = {
+		// 	email: process.env.EMAIL,
+		// 	password: process.env.PASSWORD,
+		// 	tokenNotifications: "Token inválido"
+		// };
+		// const res = await api.post("/auth/login", body);
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: process.env.PASSWORD,
+				tokenNotifications: "Token inválido"
+			}
+		});
 
 		expect(res.status).toBe(207);
 		expect(res.data).toMatchObject({
@@ -63,65 +114,154 @@ describe("POST /auth/login", () => {
 	});
 
 	test("400 - Body não é enviado", async () => {
-		const res = await api.post("/auth/login");
+		// const res = await api.post("/auth/login");
+		const res = await api({
+			method: "POST",
+			url: "/auth/login"
+		});
 
 		expect(res.status).toBe(400);
 		expect(res.data).toBe("Bad Request");
 	});
 
 	test("400 - 'email' não é enviado", async () => {
-		const body = {
-			password: process.env.PASSWORD,
-			tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		};
-		const res = await api.post("/auth/login", body);
+		// const body = {
+		// 	password: process.env.PASSWORD,
+		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+		// };
+		// const res = await api.post("/auth/login", body);
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				password: process.env.PASSWORD,
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'email' é enviado vazio", async () => {
+		// const body = {
+		// 	email: "",
+		// 	password: process.env.PASSWORD,
+		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+		// };
+		// const res = await api.post("/auth/login", body);
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: "",
+				password: process.env.PASSWORD,
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
 
 		expect(res.status).toBe(400);
 		expect(res.data).toBe("Bad Request");
 	});
 
 	test("400 - 'password' não é enviado", async () => {
-		const body = {
-			email: process.env.EMAIL,
-			tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		};
-		const res = await api.post("/auth/login", body);
+		// const body = {
+		// 	email: process.env.EMAIL,
+		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+		// };
+		// const res = await api.post("/auth/login", body);
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'password' é enviado vazio", async () => {
+		// const body = {
+		// 	email: process.env.EMAIL,
+		// 	password: "",
+		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+		// };
+		// const res = await api.post("/auth/login", body);
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: "",
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
 
 		expect(res.status).toBe(400);
 		expect(res.data).toBe("Bad Request");
 	});
 
 	test("401 - 'email' não está cadastrado no sistema", async () => {
-		const body = {
-			email: "email@email.com",
-			password: process.env.PASSWORD,
-			tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		};
-		const res = await api.post("/auth/login", body);
+		// const body = {
+		// 	email: "email@email.com",
+		// 	password: process.env.PASSWORD,
+		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+		// };
+		// const res = await api.post("/auth/login", body);
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: "email@email.com",
+				password: process.env.PASSWORD,
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
 
 		expect(res.status).toBe(401);
 		expect(res.data).toBe("Unauthorized");
 	});
 
 	test("401 - 'email' com formato inválido", async () => {
-		const body = {
-			email: "Email inválido",
-			password: process.env.PASSWORD,
-			tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		};
-		const res = await api.post("/auth/login", body);
+		// const body = {
+		// 	email: "Email inválido",
+		// 	password: process.env.PASSWORD,
+		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+		// };
+		// const res = await api.post("/auth/login", body);
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: "Email inválido",
+				password: process.env.PASSWORD,
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
 
 		expect(res.status).toBe(401);
 		expect(res.data).toBe("Unauthorized");
 	});
 
-	test("401 - 'password' não é válido", async () => {
-		const body = {
-			email: process.env.EMAIL,
-			password: "Senha inválida",
-			tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		};
-		const res = await api.post("/auth/login", body);
+	test("401 - Não existe um 'email' cadastrado que combine com 'password'", async () => {
+		// const body = {
+		// 	email: process.env.EMAIL,
+		// 	password: "Senha inválida",
+		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+		// };
+		// const res = await api.post("/auth/login", body);
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: "Senha inválida",
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
 
 		expect(res.status).toBe(401);
 		expect(res.data).toBe("Unauthorized");

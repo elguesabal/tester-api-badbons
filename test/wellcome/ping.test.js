@@ -9,43 +9,68 @@ const { api } = require("../../index.js");
 */
 describe("GET /ping", () => {
 	test("204 - 'version' é compatível", async () => {
-		const config = {
+		// const config = {
+		// 	params: {
+		// 		version: "1.0.1"
+		// 	}
+		// };
+		// const res = await api.get("/ping", config);
+		const res = await api({
+			method: "GET",
+			url: "/ping",
 			params: {
 				version: "1.0.1"
 			}
-		};
-		const res = await api.get("/ping", config);
+		});
 
 		expect(res.status).toBe(204);
 		expect(res.data).toBe("");
 	});
 
 	test("400 - 'version' não é passada", async () => {
-		const res = await api.get("/ping");
+		// const res = await api.get("/ping");
+		const res = await api({
+			method: "GET",
+			url: "/ping"
+		});
 
 		expect(res.status).toBe(400);
 		expect(res.data).toBe("Bad Request");
 	});
 
 	test("400 - 'version' é passada vazia", async () => {
-		const config = {
+		// const config = {
+		// 	params: {
+		// 		version: ""
+		// 	}
+		// };
+		// const res = await api.get("/ping", config);
+		const res = await api({
+			method: "GET",
+			url: "/ping",
 			params: {
 				version: ""
 			}
-		};
-		const res = await api.get("/ping", config);
+		});
 
 		expect(res.status).toBe(400);
 		expect(res.data).toBe("Bad Request");
 	});
 
 	test("426 - 'version' não está na lista de versões compatíveis", async () => {
-		const config = {
+		// const config = {
+		// 	params: {
+		// 		version: "0.0.0"
+		// 	}
+		// };
+		// const res = await api.get("/ping", config);
+		const res = await api({
+			method: "GET",
+			url: "/ping",
 			params: {
 				version: "0.0.0"
 			}
-		};
-		const res = await api.get("/ping", config);
+		});
 
 		expect(res.status).toBe(426);
 		expect(res.data).toBe("Upgrade Required");
