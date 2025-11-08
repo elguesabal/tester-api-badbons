@@ -121,3 +121,17 @@ describe("POST /test", () => {
 		expect(res.data).toBe("");
 	});
 });
+
+
+
+// EU PODERIA TESTAR VARIAS SITUACOES E ESPERAR Q NAO RETORNE STATUS 500
+
+// const routes = [
+// 	{
+// 		path: "/auth/login",
+// 		method: "POST",
+// 		query: false,
+// 		body: true,
+// 		header: false
+// 	}
+// ];
