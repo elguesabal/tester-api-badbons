@@ -16,12 +16,6 @@ describe("POST /auth/login", () => {
 	expect(process.env.TOKEN_NOTIFICATIONS).toBeDefined();
 
 	test("200 - 'email', 'password' e 'tokenNotifications' são válidos", async () => {
-		// const body = {
-		// 	email: process.env.EMAIL,
-		// 	password: process.env.PASSWORD,
-		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		// };
-		// const res = await api.post("/auth/login", body);
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",
@@ -41,11 +35,6 @@ describe("POST /auth/login", () => {
 	});
 
 	test("200 - 'tokenNotifications' não é enviado mas 'email' e 'password' são válidos", async () => {
-		// const body = {
-		// 	email: process.env.EMAIL,
-		// 	password: process.env.PASSWORD
-		// };
-		// const res = await api.post("/auth/login", body);
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",
@@ -64,12 +53,6 @@ describe("POST /auth/login", () => {
 	});
 
 	test("200 - 'email', 'password' são válidos mas 'tokenNotifications' é está vazio", async () => {
-		// const body = {
-		// 	email: process.env.EMAIL,
-		// 	password: process.env.PASSWORD,
-		// 	tokenNotifications: ""
-		// };
-		// const res = await api.post("/auth/login", body);
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",
@@ -89,12 +72,6 @@ describe("POST /auth/login", () => {
 	});
 
 	test("207 - 'email', 'password' são válidos mas 'tokenNotifications' é inválido", async () => {
-		// const body = {
-		// 	email: process.env.EMAIL,
-		// 	password: process.env.PASSWORD,
-		// 	tokenNotifications: "Token inválido"
-		// };
-		// const res = await api.post("/auth/login", body);
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",
@@ -114,7 +91,6 @@ describe("POST /auth/login", () => {
 	});
 
 	test("400 - Body não é enviado", async () => {
-		// const res = await api.post("/auth/login");
 		const res = await api({
 			method: "POST",
 			url: "/auth/login"
@@ -125,11 +101,6 @@ describe("POST /auth/login", () => {
 	});
 
 	test("400 - 'email' não é enviado", async () => {
-		// const body = {
-		// 	password: process.env.PASSWORD,
-		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		// };
-		// const res = await api.post("/auth/login", body);
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",
@@ -144,12 +115,6 @@ describe("POST /auth/login", () => {
 	});
 
 	test("400 - 'email' é enviado vazio", async () => {
-		// const body = {
-		// 	email: "",
-		// 	password: process.env.PASSWORD,
-		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		// };
-		// const res = await api.post("/auth/login", body);
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",
@@ -165,11 +130,6 @@ describe("POST /auth/login", () => {
 	});
 
 	test("400 - 'password' não é enviado", async () => {
-		// const body = {
-		// 	email: process.env.EMAIL,
-		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		// };
-		// const res = await api.post("/auth/login", body);
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",
@@ -184,12 +144,6 @@ describe("POST /auth/login", () => {
 	});
 
 	test("400 - 'password' é enviado vazio", async () => {
-		// const body = {
-		// 	email: process.env.EMAIL,
-		// 	password: "",
-		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		// };
-		// const res = await api.post("/auth/login", body);
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",
@@ -205,12 +159,6 @@ describe("POST /auth/login", () => {
 	});
 
 	test("401 - 'email' não está cadastrado no sistema", async () => {
-		// const body = {
-		// 	email: "email@email.com",
-		// 	password: process.env.PASSWORD,
-		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		// };
-		// const res = await api.post("/auth/login", body);
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",
@@ -226,12 +174,6 @@ describe("POST /auth/login", () => {
 	});
 
 	test("401 - 'email' com formato inválido", async () => {
-		// const body = {
-		// 	email: "Email inválido",
-		// 	password: process.env.PASSWORD,
-		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		// };
-		// const res = await api.post("/auth/login", body);
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",
@@ -247,12 +189,6 @@ describe("POST /auth/login", () => {
 	});
 
 	test("401 - Não existe um 'email' cadastrado que combine com 'password'", async () => {
-		// const body = {
-		// 	email: process.env.EMAIL,
-		// 	password: "Senha inválida",
-		// 	tokenNotifications: process.env.TOKEN_NOTIFICATIONS
-		// };
-		// const res = await api.post("/auth/login", body);
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",

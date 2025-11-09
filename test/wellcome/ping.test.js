@@ -9,12 +9,6 @@ const { api } = require("../../index.js");
 */
 describe("GET /ping", () => {
 	test("204 - 'version' é compatível", async () => {
-		// const config = {
-		// 	params: {
-		// 		version: "1.0.1"
-		// 	}
-		// };
-		// const res = await api.get("/ping", config);
 		const res = await api({
 			method: "GET",
 			url: "/ping",
@@ -28,7 +22,6 @@ describe("GET /ping", () => {
 	});
 
 	test("400 - 'version' não é passada", async () => {
-		// const res = await api.get("/ping");
 		const res = await api({
 			method: "GET",
 			url: "/ping"
@@ -39,12 +32,6 @@ describe("GET /ping", () => {
 	});
 
 	test("400 - 'version' é passada vazia", async () => {
-		// const config = {
-		// 	params: {
-		// 		version: ""
-		// 	}
-		// };
-		// const res = await api.get("/ping", config);
 		const res = await api({
 			method: "GET",
 			url: "/ping",
@@ -58,12 +45,6 @@ describe("GET /ping", () => {
 	});
 
 	test("426 - 'version' não está na lista de versões compatíveis", async () => {
-		// const config = {
-		// 	params: {
-		// 		version: "0.0.0"
-		// 	}
-		// };
-		// const res = await api.get("/ping", config);
 		const res = await api({
 			method: "GET",
 			url: "/ping",
