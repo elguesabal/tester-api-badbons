@@ -10,7 +10,7 @@ const { api } = require("../../index.js");
  * @property {stirng} PASSWORD SENHA DE USUARIO
  * @property {string} REFRESH_TOKEN TOKEN DE AUTENTICACAO DO USUARIO
 */
-describe("PATCH /swap-email", () => {											// VERIFICAR SE O EMAIL PASSA NO VALIDADOR
+describe("PATCH /swap-email", () => {
 	expect(process.env.EMAIL).toBeDefined();
 	expect(process.env.PASSWORD).toBeDefined();
 	expect(process.env.REFRESH_TOKEN).toBeDefined();
@@ -70,6 +70,244 @@ describe("PATCH /swap-email", () => {											// VERIFICAR SE O EMAIL PASSA NO
 			},
 			data: {
 				newEmail: "",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém '..')", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo..email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém '.' no início)", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: ".novo-email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém '.' no fim)", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo.email.@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém espaço)", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém mais de um '@')", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo@email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém '<')", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo<email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém '>')", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo>email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém '(')", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo(email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém ')')", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo)email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém ',')", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo,email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém aspas duplas)", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo\"email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém ':')", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo:email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém ';')", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo;email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Formato do novo e-mail inválido (contém '\\')", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo\\email@email.com",
 				password: process.env.PASSWORD
 			}
 		});

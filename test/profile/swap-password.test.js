@@ -9,7 +9,7 @@ const { api } = require("../../index.js");
  * @property {stirng} PASSWORD SENHA DE USUARIO
  * @property {string} REFRESH_TOKEN TOKEN DE AUTENTICACAO DO USUARIO
 */
-describe("PATCH /swap-password", () => {
+describe("PATCH /swap-password", () => {												// TENHO Q TESTAR SE A SENHA ATENDE AOS REQUISITOS MINIMOS
 	test("204 - 'authorization', 'newPassword' e 'password' são enviadas corretamente", async () => {
 		const res = await api({
 			method: "PATCH",
@@ -25,5 +25,213 @@ describe("PATCH /swap-password", () => {
 
 		expect(res.status).toBe(204);
 		expect(res.data).toBe("");
+	});
+
+	test("400 - Body não enviado", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body não contém 'newPassword'", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'newPassword' é enviado vazio", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newPassword: "",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body não contém 'password'", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newPassword: "12345"
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'password' é enviado vazio", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newPassword: "12345",
+				password: ""
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("401 - Header não contém 'Authorization'", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			data: {
+				newPassword: "12345",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' está vazio", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: ""
+			},
+			data: {
+				newPassword: "12345",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - Token é inválido", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: "Bearer token inválido"
+			},
+			data: {
+				newPassword: "12345",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O token está vazio", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: "Bearer "
+			},
+			data: {
+				newPassword: "12345",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - 'Authorization' não contém o formato 'Bearer <token>'", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: process.env.REFRESH_TOKEN
+			},
+			data: {
+				newPassword: "12345",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - 'Authorization' inválido e body não enviado (testa se o body é lido sem o cliente estar autenticado)", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: "Bearer token inválido"
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("403 - Senha está incorreta mas o token é válido", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newPassword: "12345",
+				password: "senha errada"
+			}
+		});
+
+		expect(res.status).toBe(403);
+		expect(res.data).toBe("Forbidden");
+	});
+
+	test("409 - A antiga senha, já em uso, foi enviado no campo 'newPassword'", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newPassword: process.env.PASSWORD,
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(409);
+		expect(res.data).toBe("Conflict");
 	});
 });
