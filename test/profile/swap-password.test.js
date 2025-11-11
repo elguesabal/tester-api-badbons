@@ -9,7 +9,7 @@ const { api } = require("../../index.js");
  * @property {stirng} PASSWORD SENHA DE USUARIO
  * @property {string} REFRESH_TOKEN TOKEN DE AUTENTICACAO DO USUARIO
 */
-describe("PATCH /swap-password", () => {												// TENHO Q TESTAR SE A SENHA ATENDE AOS REQUISITOS MINIMOS
+describe("PATCH /swap-password", () => {
 	test("204 - 'authorization', 'newPassword' e 'password' são enviadas corretamente", async () => {
 		const res = await api({
 			method: "PATCH",
@@ -18,7 +18,7 @@ describe("PATCH /swap-password", () => {												// TENHO Q TESTAR SE A SENHA
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
-				newPassword: "12345",
+				newPassword: "abc123",
 				password: process.env.PASSWORD
 			}
 		});
@@ -233,5 +233,56 @@ describe("PATCH /swap-password", () => {												// TENHO Q TESTAR SE A SENHA
 
 		expect(res.status).toBe(409);
 		expect(res.data).toBe("Conflict");
+	});
+
+	test("422 - A nova senha é menor que 5 dígitos", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newPassword: "abc0",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(422);
+		expect(res.data).toBe("Unprocessable Entity");
+	});
+
+	test("422 - A nova senha não contém números", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newPassword: "abcde",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(422);
+		expect(res.data).toBe("Unprocessable Entity");
+	});
+
+	test("422 - A nova senha não contém letras", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-password",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newPassword: "12345",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(422);
+		expect(res.data).toBe("Unprocessable Entity");
 	});
 });
