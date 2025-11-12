@@ -486,7 +486,7 @@ describe("PATCH /swap-email", () => {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
-				newEmail:"email-em-uso@domino.com",
+				newEmail:"email-em-uso@dominio.com",
 				password: process.env.PASSWORD
 			}
 		});

@@ -2,35 +2,32 @@ const { api } = require("../../index.js");
 
 /**
  * @author VAMPETA
- * @brief ROTA QUE INFORMA A QUANTIDADE DE EXERCICIOS FEITOS
- * @method GET
- * @route /user/treinos
+ * @brief ROTA QUE LOGA USAND O TOKEN
+ * @method POST
+ * @route /auth/login-token
  * @warning ESSE TESTE NECESSECITA DE 1 VARIAVEL DE AMBIENTE
- * @property {string} REFRESH_TOKEN TOKEN DE AUTENTICACAO DO USUARIO
+ * @property {string} REFRESH_TOKEN TOKEN DO USUARIO
 */
-describe("GET /user/treinos", () => {
+describe("POST /auth/login-token", () => {
 	expect(process.env.REFRESH_TOKEN).toBeDefined();
 
-	test("200 - O token do usuário é válido", async () => {
+	test("204 - 'Authorization' contém um token válido", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/user/treinos",
+			method: "POST",
+			url: "/auth/login-token",
 			headers: {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			}
 		});
 
-		expect(res.status).toBe(200);
-		expect(res.data).toMatchObject({
-			treinosTotais: expect.any(Number),
-			treinosFeitos: expect.any(Number)
-		});
+		expect(res.status).toBe(204);
+		expect(res.data).toBe("");
 	});
 
 	test("401 - 'Authorization' não foi enviado", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/user/treinos"
+			method: "POST",
+			url: "/auth/login-token"
 		});
 
 		expect(res.status).toBe(401);
@@ -39,8 +36,8 @@ describe("GET /user/treinos", () => {
 
 	test("401 - O campo 'Authorization' está vazio", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/user/treinos",
+			method: "POST",
+			url: "/auth/login-token",
 			headers: {
 				Authorization: ""
 			}
@@ -52,8 +49,8 @@ describe("GET /user/treinos", () => {
 
 	test("401 - 'Authorization' não contém o formato 'Bearer <token>'", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/user/treinos",
+			method: "POST",
+			url: "/auth/login-token",
 			headers: {
 				Authorization: process.env.REFRESH_TOKEN
 			}
@@ -65,8 +62,8 @@ describe("GET /user/treinos", () => {
 
 	test("401 - O token está vazio", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/user/treinos",
+			method: "POST",
+			url: "/auth/login-token",
 			headers: {
 				Authorization: "Bearer "
 			}
@@ -78,8 +75,8 @@ describe("GET /user/treinos", () => {
 
 	test("401 - Token é inválido", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/user/treinos",
+			method: "POST",
+			url: "/auth/login-token",
 			headers: {
 				Authorization: "Bearer token inválido"
 			}
