@@ -11,6 +11,7 @@
     "/auth/login-token": "jest --verbose test/wellcome/auth-login-token.test.js",
     "/swap-email": "jest --verbose test/profile/swap-email.test.js",
     "/swap-password": "jest --verbose test/profile/swap-password.test.js",
+    "/swap-credentials": "jest --verbose test/profile/swap-credentials.test.js",
     "/user/treinos": "jest --verbose test/home/user-treinos.test.js"
   },
   "keywords": [],

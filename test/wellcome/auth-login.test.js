@@ -11,9 +11,9 @@ const { api } = require("../../index.js");
  * @property {string} TOKEN_NOTIFICATIONS TOKEN EXPO USADO PARA ENVIAR NOTIFICACAO
 */
 describe("POST /auth/login", () => {
+	expect(process.env.TOKEN_NOTIFICATIONS).toBeDefined();
 	expect(process.env.EMAIL).toBeDefined();
 	expect(process.env.PASSWORD).toBeDefined();
-	expect(process.env.TOKEN_NOTIFICATIONS).toBeDefined();
 
 	test("200 - 'email', 'password' e 'tokenNotifications' são válidos", async () => {
 		const res = await api({
