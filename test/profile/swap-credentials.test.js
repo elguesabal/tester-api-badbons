@@ -20,7 +20,49 @@ describe("PATCH /swap-credentials", () => {
 			},
 			data: {
 				name: "Satoru Gojo",
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
+				cpf: "070.680.938-68",
+				date: "07/12/1989",
+				nationality: "Japão",
+				sex: "Masculino"
+			}
+		})
+
+		expect(res.status).toBe(204);
+		expect(res.data).toBe("");
+	});
+
+	test("204 - Todas as informações são enviadas corretamente (formato de 'phone' +00 00 00000-0000)", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				name: "Satoru Gojo",
+				phone: "+55 21 97117-8764",
+				cpf: "070.680.938-68",
+				date: "07/12/1989",
+				nationality: "Japão",
+				sex: "Masculino"
+			}
+		})
+
+		expect(res.status).toBe(204);
+		expect(res.data).toBe("");
+	});
+
+	test("204 - Todas as informações são enviadas corretamente (formato de 'phone' +0000000000000)", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				name: "Satoru Gojo",
+				phone: "+5521971178764",
 				cpf: "070.680.938-68",
 				date: "07/12/1989",
 				nationality: "Japão",
@@ -41,7 +83,7 @@ describe("PATCH /swap-credentials", () => {
 			},
 			data: {
 				name: "Satoru Gojo",
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
 				cpf: "07068093868",
 				date: "07/12/1989",
 				nationality: "Japão",
@@ -66,6 +108,27 @@ describe("PATCH /swap-credentials", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
+	test("400 - Código de país ausente em 'phone'", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				name: "Satoru Gojo",
+				phone: "(21) 97117-8764",
+				cpf: "070.680.938-68",
+				date: "07/12/1989",
+				nationality: "Japão",
+				sex: "Masculino"
+			}
+		})
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
 	test("400 - Campo 'name' não enviado", async () => {
 		const res = await api({
 			method: "PATCH",
@@ -74,7 +137,7 @@ describe("PATCH /swap-credentials", () => {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
 				cpf: "070.680.938-68",
 				date: "07/12/1989",
 				nationality: "Japão",
@@ -115,7 +178,7 @@ describe("PATCH /swap-credentials", () => {
 			},
 			data: {
 				name: "Satoru Gojo",
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
 				date: "07/12/1989",
 				nationality: "Japão",
 				sex: "Masculino"
@@ -135,7 +198,7 @@ describe("PATCH /swap-credentials", () => {
 			},
 			data: {
 				name: "Satoru Gojo",
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
 				cpf: "Cpf inválido",
 				date: "07/12/1989",
 				nationality: "Japão",
@@ -156,7 +219,7 @@ describe("PATCH /swap-credentials", () => {
 			},
 			data: {
 				name: "Satoru Gojo",
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
 				cpf: "070.680.938-68",
 				nationality: "Japão",
 				sex: "Masculino"
@@ -176,7 +239,7 @@ describe("PATCH /swap-credentials", () => {
 			},
 			data: {
 				name: "Satoru Gojo",
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
 				cpf: "070.680.938-68",
 				date: "07/12/1989",
 				sex: "Masculino"
@@ -196,7 +259,7 @@ describe("PATCH /swap-credentials", () => {
 			},
 			data: {
 				name: "Satoru Gojo",
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
 				cpf: "070.680.938-68",
 				date: "07/12/1989",
 				nationality: "Japão"
@@ -213,7 +276,7 @@ describe("PATCH /swap-credentials", () => {
 			url: "/swap-credentials",
 			data: {
 				name: "Satoru Gojo",
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
 				cpf: "070.680.938-68",
 				date: "07/12/1989",
 				nationality: "Japão",
@@ -234,7 +297,7 @@ describe("PATCH /swap-credentials", () => {
 			},
 			data: {
 				name: "Satoru Gojo",
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
 				cpf: "070.680.938-68",
 				date: "07/12/1989",
 				nationality: "Japão",
@@ -255,7 +318,7 @@ describe("PATCH /swap-credentials", () => {
 			},
 			data: {
 				name: "Satoru Gojo",
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
 				cpf: "070.680.938-68",
 				date: "07/12/1989",
 				nationality: "Japão",
@@ -276,7 +339,7 @@ describe("PATCH /swap-credentials", () => {
 			},
 			data: {
 				name: "Satoru Gojo",
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
 				cpf: "070.680.938-68",
 				date: "07/12/1989",
 				nationality: "Japão",
@@ -297,7 +360,7 @@ describe("PATCH /swap-credentials", () => {
 			},
 			data: {
 				name: "Satoru Gojo",
-				phone: "(00) 00000-0000",
+				phone: "+55 (21) 97117-8764",
 				cpf: "070.680.938-68",
 				date: "07/12/1989",
 				nationality: "Japão",
