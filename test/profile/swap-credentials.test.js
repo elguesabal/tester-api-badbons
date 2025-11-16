@@ -108,7 +108,35 @@ describe("PATCH /swap-credentials", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
-	test("400 - Código de país ausente em 'phone'", async () => {
+	test("400 - Body é null", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: null
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body é undefined", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: undefined
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body é um objeto vazio", async () => {
 		const res = await api({
 			method: "PATCH",
 			url: "/swap-credentials",
@@ -116,14 +144,40 @@ describe("PATCH /swap-credentials", () => {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
-				name: "Satoru Gojo",
-				phone: "(21) 97117-8764",
-				cpf: "070.680.938-68",
-				date: "07/12/1989",
-				nationality: "Japão",
-				sex: "Masculino"
+
 			}
-		})
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body é um array vazio", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: []
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body é um array não vazio", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: [
+				"not",
+				"empty"
+			]
+		});
 
 		expect(res.status).toBe(400);
 		expect(res.data).toBe("Bad Request");
@@ -149,6 +203,132 @@ describe("PATCH /swap-credentials", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
+	test("400 - Campo 'name' vazio", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				name: "",
+				phone: "+55 (21) 97117-8764",
+				cpf: "070.680.938-68",
+				date: "07/12/1989",
+				nationality: "Japão",
+				sex: "Masculino"
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	// test("400 - Campo 'name' é null", async () => {
+	// 	const res = await api({
+	// 		method: "PATCH",
+	// 		url: "/swap-credentials",
+	// 		headers: {
+	// 			Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+	// 		},
+	// 		data: {
+	// 			name: null,
+	// 			phone: "+55 (21) 97117-8764",
+	// 			cpf: "070.680.938-68",
+	// 			date: "07/12/1989",
+	// 			nationality: "Japão",
+	// 			sex: "Masculino"
+	// 		}
+	// 	});
+
+	// 	expect(res.status).toBe(400);
+	// 	expect(res.data).toBe("Bad Request");
+	// });
+
+	// test("400 - Campo 'name' é undefined", async () => {
+	// 	const res = await api({
+	// 		method: "PATCH",
+	// 		url: "/swap-credentials",
+	// 		headers: {
+	// 			Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+	// 		},
+	// 		data: {
+	// 			name: undefined,
+	// 			phone: "+55 (21) 97117-8764",
+	// 			cpf: "070.680.938-68",
+	// 			date: "07/12/1989",
+	// 			nationality: "Japão",
+	// 			sex: "Masculino"
+	// 		}
+	// 	});
+
+	// 	expect(res.status).toBe(400);
+	// 	expect(res.data).toBe("Bad Request");
+	// });
+
+	// test("400 - Campo 'name' é um array", async () => {
+	// 	const res = await api({
+	// 		method: "PATCH",
+	// 		url: "/swap-credentials",
+	// 		headers: {
+	// 			Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+	// 		},
+	// 		data: {
+	// 			name: [],
+	// 			phone: "+55 (21) 97117-8764",
+	// 			cpf: "070.680.938-68",
+	// 			date: "07/12/1989",
+	// 			nationality: "Japão",
+	// 			sex: "Masculino"
+	// 		}
+	// 	});
+
+	// 	expect(res.status).toBe(400);
+	// 	expect(res.data).toBe("Bad Request");
+	// });
+
+	// test("400 - Campo 'name' é um objeto", async () => {
+	// 	const res = await api({
+	// 		method: "PATCH",
+	// 		url: "/swap-credentials",
+	// 		headers: {
+	// 			Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+	// 		},
+	// 		data: {
+	// 			name: {},
+	// 			phone: "+55 (21) 97117-8764",
+	// 			cpf: "070.680.938-68",
+	// 			date: "07/12/1989",
+	// 			nationality: "Japão",
+	// 			sex: "Masculino"
+	// 		}
+	// 	});
+
+	// 	expect(res.status).toBe(400);
+	// 	expect(res.data).toBe("Bad Request");
+	// });
+
+	// test("400 - Campo 'name' é um número", async () => {
+	// 	const res = await api({
+	// 		method: "PATCH",
+	// 		url: "/swap-credentials",
+	// 		headers: {
+	// 			Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+	// 		},
+	// 		data: {
+	// 			name: 42,
+	// 			phone: "+55 (21) 97117-8764",
+	// 			cpf: "070.680.938-68",
+	// 			date: "07/12/1989",
+	// 			nationality: "Japão",
+	// 			sex: "Masculino"
+	// 		}
+	// 	});
+
+	// 	expect(res.status).toBe(400);
+	// 	expect(res.data).toBe("Bad Request");
+	// });
+
 	test("400 - Campo 'phone' não enviado", async () => {
 		const res = await api({
 			method: "PATCH",
@@ -168,6 +348,90 @@ describe("PATCH /swap-credentials", () => {
 		expect(res.status).toBe(400);
 		expect(res.data).toBe("Bad Request");
 	});
+
+	test("400 - Campo 'phone' vazio", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				name: "Satoru Gojo",
+				phone: "",
+				cpf: "070.680.938-68",
+				date: "07/12/1989",
+				nationality: "Japão",
+				sex: "Masculino"
+			}
+		})
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Código de país ausente em 'phone'", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				name: "Satoru Gojo",
+				phone: "(21) 97117-8764",
+				cpf: "070.680.938-68",
+				date: "07/12/1989",
+				nationality: "Japão",
+				sex: "Masculino"
+			}
+		})
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Campo 'phone' inválido", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				name: "Satoru Gojo",
+				phone: "Número inválido",
+				cpf: "070.680.938-68",
+				date: "07/12/1989",
+				nationality: "Japão",
+				sex: "Masculino"
+			}
+		})
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	// test("400 - O campo 'phone' é um array", async () => {
+	// 	const res = await api({
+	// 		method: "PATCH",
+	// 		url: "/swap-credentials",
+	// 		headers: {
+	// 			Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+	// 		},
+	// 		data: {
+	// 			name: "Satoru Gojo",
+	// 			phone: [],
+	// 			cpf: "070.680.938-68",
+	// 			date: "07/12/1989",
+	// 			nationality: "Japão",
+	// 			sex: "Masculino"
+	// 		}
+	// 	})
+
+	// 	expect(res.status).toBe(400);
+	// 	expect(res.data).toBe("Bad Request");
+	// });
 
 	test("400 - Campo 'cpf' não enviado", async () => {
 		const res = await api({
@@ -229,6 +493,132 @@ describe("PATCH /swap-credentials", () => {
 		expect(res.status).toBe(400);
 		expect(res.data).toBe("Bad Request");
 	});
+
+	test("400 - Campo 'date' segue o padrão DD-MM-AAAA", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				name: "Satoru Gojo",
+				phone: "+55 (21) 97117-8764",
+				cpf: "070.680.938-68",
+				date: "07-12-1989",
+				nationality: "Japão",
+				sex: "Masculino"
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Campo 'date' segue o padrão AAAA-MM-DD", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				name: "Satoru Gojo",
+				phone: "+55 (21) 97117-8764",
+				cpf: "070.680.938-68",
+				date: "1989-12-07",
+				nationality: "Japão",
+				sex: "Masculino"
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Campo 'date' segue o padrão AAAA/MM/DD", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				name: "Satoru Gojo",
+				phone: "+55 (21) 97117-8764",
+				cpf: "070.680.938-68",
+				date: "1989/12/07",
+				nationality: "Japão",
+				sex: "Masculino"
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Campo 'date' segue o padrão MM/DD/AAAA (Pode funcionar em alguns casos que o dia é menor que 12, mas de forma erronea)", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				name: "Satoru Gojo",
+				phone: "+55 (21) 97117-8764",
+				cpf: "070.680.938-68",
+				date: "12/21/1952",
+				nationality: "Japão",
+				sex: "Masculino"
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Campo 'date' é inválido", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-credentials",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				name: "Satoru Gojo",
+				phone: "+55 (21) 97117-8764",
+				cpf: "070.680.938-68",
+				date: "Data inválida",
+				nationality: "Japão",
+				sex: "Masculino"
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	// test("400 - Campo 'date' é um número", async () => {
+	// 	const res = await api({
+	// 		method: "PATCH",
+	// 		url: "/swap-credentials",
+	// 		headers: {
+	// 			Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+	// 		},
+	// 		data: {
+	// 			name: "Satoru Gojo",
+	// 			phone: "+55 (21) 97117-8764",
+	// 			cpf: "070.680.938-68",
+	// 			date: 42,
+	// 			nationality: "Japão",
+	// 			sex: "Masculino"
+	// 		}
+	// 	});
+
+	// 	expect(res.status).toBe(400);
+	// 	expect(res.data).toBe("Bad Request");
+	// });
 
 	test("400 - Campo 'nationality' não enviado", async () => {
 		const res = await api({

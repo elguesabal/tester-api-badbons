@@ -205,6 +205,18 @@ describe("Testes gerais de comportamento do express na rota /test", () => {
 		expect(res.status).toBe(204);
 	});
 
+	test("Headers, query e body são arrays", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/test",
+			headers: [],
+			params: [],
+			data: []
+		});
+
+		expect(res.status).toBe(204);
+	});
+
 	test("Query malformada", async () => {
 		const res = await api({
 			method: "POST",
