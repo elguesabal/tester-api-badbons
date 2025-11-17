@@ -52,7 +52,7 @@ describe("POST /auth/login", () => {
 		});
 	});
 
-	test("200 - 'email', 'password' são válidos mas 'tokenNotifications' é está vazio", async () => {
+	test("207 - 'email', 'password' são válidos mas 'tokenNotifications' é está vazio", async () => {
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",
@@ -63,7 +63,26 @@ describe("POST /auth/login", () => {
 			}
 		});
 
-		expect(res.status).toBe(200);
+		expect(res.status).toBe(207);
+		expect(res.data).toMatchObject({
+			RefreshToken: expect.any(String),
+			accesstoken: expect.any(String),
+			validToken: false
+		});
+	});
+
+	test("207 - 'email', 'password' são válidos mas 'tokenNotifications' é null", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: process.env.PASSWORD,
+				tokenNotifications: null
+			}
+		});
+
+		expect(res.status).toBe(207);
 		expect(res.data).toMatchObject({
 			RefreshToken: expect.any(String),
 			accesstoken: expect.any(String),
@@ -90,10 +109,100 @@ describe("POST /auth/login", () => {
 		});
 	});
 
+	test("207 - 'email', 'password' são válidos mas 'tokenNotifications' é um objeto", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: process.env.PASSWORD,
+				tokenNotifications: {}
+			}
+		});
+
+		expect(res.status).toBe(207);
+		expect(res.data).toMatchObject({
+			RefreshToken: expect.any(String),
+			accesstoken: expect.any(String),
+			validToken: false
+		});
+	});
+
+	test("207 - 'email', 'password' são válidos mas 'tokenNotifications' é um array", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: process.env.PASSWORD,
+				tokenNotifications: []
+			}
+		});
+
+		expect(res.status).toBe(207);
+		expect(res.data).toMatchObject({
+			RefreshToken: expect.any(String),
+			accesstoken: expect.any(String),
+			validToken: false
+		});
+	});
+
+	test("207 - 'email', 'password' são válidos mas 'tokenNotifications' é um número", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: process.env.PASSWORD,
+				tokenNotifications: 42
+			}
+		});
+
+		expect(res.status).toBe(207);
+		expect(res.data).toMatchObject({
+			RefreshToken: expect.any(String),
+			accesstoken: expect.any(String),
+			validToken: false
+		});
+	});
+
 	test("400 - Body não é enviado", async () => {
 		const res = await api({
 			method: "POST",
 			url: "/auth/login"
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body é null", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: null
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body é um array", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: []
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body é uma string", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: "string"
 		});
 
 		expect(res.status).toBe(400);
@@ -105,6 +214,21 @@ describe("POST /auth/login", () => {
 			method: "POST",
 			url: "/auth/login",
 			data: {
+				password: process.env.PASSWORD,
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'email' é null", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: null,
 				password: process.env.PASSWORD,
 				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
 			}
@@ -129,12 +253,72 @@ describe("POST /auth/login", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
+	test("400 - 'email' é um objeto", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: {},
+				password: process.env.PASSWORD,
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'email' é um array", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: [],
+				password: process.env.PASSWORD,
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'email' é um número", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: 42,
+				password: process.env.PASSWORD,
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
 	test("400 - 'password' não é enviado", async () => {
 		const res = await api({
 			method: "POST",
 			url: "/auth/login",
 			data: {
 				email: process.env.EMAIL,
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'password' é null", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: null,
 				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
 			}
 		});
@@ -150,6 +334,51 @@ describe("POST /auth/login", () => {
 			data: {
 				email: process.env.EMAIL,
 				password: "",
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'password' é objeto", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: {},
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'password' é um array", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: [],
+				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'password' é número", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login",
+			data: {
+				email: process.env.EMAIL,
+				password: 42,
 				tokenNotifications: process.env.TOKEN_NOTIFICATIONS
 			}
 		});

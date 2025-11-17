@@ -34,12 +34,64 @@ describe("POST /auth/login-token", () => {
 		expect(res.data).toBe("Unauthorized");
 	});
 
+	test("401 - O campo 'Authorization' é null", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login-token",
+			headers: {
+				Authorization: null
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
 	test("401 - O campo 'Authorization' está vazio", async () => {
 		const res = await api({
 			method: "POST",
 			url: "/auth/login-token",
 			headers: {
 				Authorization: ""
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é um objeto", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login-token",
+			headers: {
+				Authorization: {}
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é um array", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login-token",
+			headers: {
+				Authorization: []
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é um número", async () => {
+		const res = await api({
+			method: "POST",
+			url: "/auth/login-token",
+			headers: {
+				Authorization: 42
 			}
 		});
 

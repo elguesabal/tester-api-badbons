@@ -37,12 +37,64 @@ describe("GET /user/treinos", () => {
 		expect(res.data).toBe("Unauthorized");
 	});
 
+	test("401 - O campo 'Authorization' é null", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/user/treinos",
+			headers: {
+				Authorization: null
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
 	test("401 - O campo 'Authorization' está vazio", async () => {
 		const res = await api({
 			method: "GET",
 			url: "/user/treinos",
 			headers: {
 				Authorization: ""
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é um objeto", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/user/treinos",
+			headers: {
+				Authorization: {}
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é um array", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/user/treinos",
+			headers: {
+				Authorization: []
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é um número", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/user/treinos",
+			headers: {
+				Authorization: 42
 			}
 		});
 

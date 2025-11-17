@@ -45,6 +45,48 @@ describe("PATCH /swap-email", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
+	test("400 - Body é null", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: null
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body é um array", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: []
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body é uma string", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: "string"
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
 	test("400 - Body não contém 'newEmail'", async () => {
 		const res = await api({
 			method: "PATCH",
@@ -53,6 +95,90 @@ describe("PATCH /swap-email", () => {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'newEmail' não é enviado", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'newEmail' é null", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: null,
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'newEmail' é um objeto", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: {},
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'newEmail' é um array", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: [],
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'newEmail' é um número", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: 42,
 				password: process.env.PASSWORD
 			}
 		});
@@ -332,6 +458,23 @@ describe("PATCH /swap-email", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
+	test("400 - 'password' é null", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo-email@email.com",
+				password: null
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
 	test("400 - 'password' é enviado vazio", async () => {
 		const res = await api({
 			method: "PATCH",
@@ -342,6 +485,57 @@ describe("PATCH /swap-email", () => {
 			data: {
 				newEmail: "novo-email@email.com",
 				password: ""
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'password' é um objeto", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo-email@email.com",
+				password: {}
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'password' é um array", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo-email@email.com",
+				password: []
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'password' é um número", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				newEmail: "novo-email@email.com",
+				password: 42
 			}
 		});
 
@@ -363,12 +557,80 @@ describe("PATCH /swap-email", () => {
 		expect(res.data).toBe("Unauthorized");
 	});
 
+	test("401 - O campo 'Authorization' é null", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: null
+			},
+			data: {
+				newEmail: "novo-email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
 	test("401 - O campo 'Authorization' está vazio", async () => {
 		const res = await api({
 			method: "PATCH",
 			url: "/swap-email",
 			headers: {
 				Authorization: ""
+			},
+			data: {
+				newEmail: "novo-email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é um objeto", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: {}
+			},
+			data: {
+				newEmail: "novo-email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é um array", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: []
+			},
+			data: {
+				newEmail: "novo-email@email.com",
+				password: process.env.PASSWORD
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é um número", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/swap-email",
+			headers: {
+				Authorization: 42
 			},
 			data: {
 				newEmail: "novo-email@email.com",

@@ -1,5 +1,7 @@
 const { api } = require("../../index.js");
 
+// FALTA TESTAR nationality E sex
+
 /**
  * @author VAMPETA
  * @brief ROTA QUE TROCA AS CREDENCIAIS DO USUARIO

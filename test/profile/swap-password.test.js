@@ -1,5 +1,7 @@
 const { api } = require("../../index.js");
 
+// FALTA VERIFICACOES COM NULL, OBJECT, ARRAY E NUMBER
+
 /**
  * @author VAMPETA
  * @brief ROTA QUE TROCA A SENHA DO USUARIO
