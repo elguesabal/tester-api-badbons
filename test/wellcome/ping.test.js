@@ -24,7 +24,10 @@ describe("GET /ping", () => {
 	test("400 - 'version' não é passada", async () => {
 		const res = await api({
 			method: "GET",
-			url: "/ping"
+			url: "/ping",
+			params: {
+				
+			}
 		});
 
 		expect(res.status).toBe(400);
