@@ -49,6 +49,8 @@ Comando usado para testar apenas uma rota específica.
     - /swap-email
     - /swap-password
     - /swap-credentials
+    - /notification
+    - /notifications
 
 - Home
     - /user/treinos
