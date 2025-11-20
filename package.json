@@ -13,6 +13,7 @@
     "/swap-password": "jest --verbose test/profile/swap-password.test.js",
     "/notification": "jest --verbose test/profile/notification.test.js",
     "/notifications": "jest --verbose test/profile/notifications.test.js",
+    "/game-history": "jest --verbose test/profile/game-history.test.js",
     "/swap-credentials": "jest --verbose test/profile/swap-credentials.test.js",
     "/user/treinos": "jest --verbose test/home/user-treinos.test.js"
   },

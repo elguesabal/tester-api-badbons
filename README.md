@@ -51,6 +51,7 @@ Comando usado para testar apenas uma rota específica.
     - /swap-credentials
     - /notification
     - /notifications
+    - /game-history
 
 - Home
     - /user/treinos

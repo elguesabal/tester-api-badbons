@@ -47,6 +47,45 @@ describe("GET /ping", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
+	test("400 - 'version' está fora do padrão X.Y.Z (version inválida)", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/ping",
+			params: {
+				version: "version inválida"
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'version' está fora do padrão X.Y.Z (X.Y.Z)", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/ping",
+			params: {
+				version: "X.Y.Z"
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'version' está fora do padrão X.Y.Z (1-0-1)", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/ping",
+			params: {
+				version: "1-0-1"
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
 	test("426 - 'version' não está na lista de versões compatíveis", async () => {
 		const res = await api({
 			method: "GET",
