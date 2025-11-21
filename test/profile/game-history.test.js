@@ -8,7 +8,7 @@ const { api } = require("../../index.js");
  * @warning ESSE TESTE NECESSECITA DE 1 VARIAVEL DE AMBIENTE
  * @property {string} REFRESH_TOKEN TOKEN DE AUTENTICACAO DO USUARIO
 */
-describe("GET /game-history", () => {						// FALTA REFATORAR O FRONT END
+describe("GET /game-history", () => {
 	expect(process.env.REFRESH_TOKEN).toBeDefined();
 
 	test("200 - Todas as informações são enviadas corretamente", async () => {
