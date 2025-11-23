@@ -46,6 +46,7 @@ Comando usado para testar apenas uma rota específica.
     - /auth/login-token
 
 - Profile
+    - /user/update-image
     - /swap-email
     - /swap-password
     - /swap-credentials

@@ -9,6 +9,7 @@
     "/ping": "jest --verbose test/wellcome/ping.test.js",
     "/auth/login": "jest --verbose test/wellcome/auth-login.test.js",
     "/auth/login-token": "jest --verbose test/wellcome/auth-login-token.test.js",
+    "/user/update-image": "jest --verbose test/profile/user-update-image.test.js",
     "/swap-email": "jest --verbose test/profile/swap-email.test.js",
     "/swap-password": "jest --verbose test/profile/swap-password.test.js",
     "/notification": "jest --verbose test/profile/notification.test.js",
