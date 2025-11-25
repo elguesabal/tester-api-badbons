@@ -61,6 +61,24 @@ describe("PATCH /user/update-image", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
+	test("400 - Enviando duas imagens", async () => {
+		const form = new FormData();
+		form.append("fotoPerfil", fs.createReadStream(`${process.cwd()}/assets/toji.jpg`));
+		form.append("fotoPerfil", fs.createReadStream(`${process.cwd()}/assets/toji.jpg`));
+		const res = await api({
+			method: "PATCH",
+			url: "/user/update-image",
+			headers: {
+				authorization: `Bearer ${process.env.REFRESH_TOKEN}`,
+				...form.getHeaders()
+			},
+			data: form
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
 	test("400 - Body é null", async () => {
 		const res = await api({
 			method: "PATCH",
@@ -91,7 +109,7 @@ describe("PATCH /user/update-image", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
-	test("400 - Body é uma stirng", async () => {
+	test("400 - Body é uma string", async () => {
 		const res = await api({
 			method: "PATCH",
 			url: "/user/update-image",
@@ -121,40 +139,6 @@ describe("PATCH /user/update-image", () => {
 
 		expect(res.status).toBe(400);
 		expect(res.data).toBe("Bad Request");
-	});
-
-	test("415 - Formato de imagem não suportado", async () => {
-		const form = new FormData();
-		form.append("fotoPerfil", fs.createReadStream(`${process.cwd()}/assets/webp.webp`));
-		const res = await api({
-			method: "PATCH",
-			url: "/user/update-image",
-			headers: {
-				authorization: `Bearer ${process.env.REFRESH_TOKEN}`,
-				...form.getHeaders()
-			},
-			data: form
-		});
-
-		expect(res.status).toBe(415);
-		expect(res.data).toBe("Unsupported Media Type");
-	});
-
-	test("415 - Content-Type inválido ou inesperado", async () => {
-		const form = new FormData();
-		form.append("fotoPerfil", fs.createReadStream(`${process.cwd()}/assets/toji.jpg`));
-		const res = await api({
-			method: "PATCH",
-			url: "/user/update-image",
-			headers: {
-				authorization: `Bearer ${process.env.REFRESH_TOKEN}`,
-				"Content-Type": "application/json"
-			},
-			data: form
-		});
-
-		expect(res.status).toBe(415);
-		expect(res.data).toBe("Unsupported Media Type");
 	});
 
 	test("401 - Header não contém 'Authorization'", async () => {
@@ -273,5 +257,124 @@ describe("PATCH /user/update-image", () => {
 
 		expect(res.status).toBe(413);
 		expect(res.data).toBe("Payload Too Large");
+	});
+
+	test("415 - Enviando um arquivo sem extensão (o arquivo só contem texto)", async () => {
+		const form = new FormData();
+		form.append("fotoPerfil", fs.createReadStream(`${process.cwd()}/assets/squirtle.txt`));
+		const res = await api({
+			method: "PATCH",
+			url: "/user/update-image",
+			headers: {
+				authorization: `Bearer ${process.env.REFRESH_TOKEN}`,
+				...form.getHeaders()
+			},
+			data: form
+		});
+
+		expect(res.status).toBe(415);
+		expect(res.data).toBe("Unsupported Media Type");
+	});
+
+	test("415 - Enviando um arquivo sem extensão (o arquivo contém uma imagem jpg real)", async () => {
+		const form = new FormData();
+		form.append("fotoPerfil", fs.createReadStream(`${process.cwd()}/assets/toji`));
+		const res = await api({
+			method: "PATCH",
+			url: "/user/update-image",
+			headers: {
+				authorization: `Bearer ${process.env.REFRESH_TOKEN}`,
+				...form.getHeaders()
+			},
+			data: form
+		});
+
+		expect(res.status).toBe(415);
+		expect(res.data).toBe("Unsupported Media Type");
+	});
+
+	test("415 - Formato de imagem não suportado", async () => {
+		const form = new FormData();
+		form.append("fotoPerfil", fs.createReadStream(`${process.cwd()}/assets/webp.webp`));
+		const res = await api({
+			method: "PATCH",
+			url: "/user/update-image",
+			headers: {
+				authorization: `Bearer ${process.env.REFRESH_TOKEN}`,
+				...form.getHeaders()
+			},
+			data: form
+		});
+
+		expect(res.status).toBe(415);
+		expect(res.data).toBe("Unsupported Media Type");
+	});
+
+	test("415 - Content-Type inválido ou inesperado", async () => {
+		const form = new FormData();
+		form.append("fotoPerfil", fs.createReadStream(`${process.cwd()}/assets/toji.jpg`));
+		const res = await api({
+			method: "PATCH",
+			url: "/user/update-image",
+			headers: {
+				authorization: `Bearer ${process.env.REFRESH_TOKEN}`,
+				"Content-Type": "application/json"
+			},
+			data: form
+		});
+
+		expect(res.status).toBe(415);
+		expect(res.data).toBe("Unsupported Media Type");
+	});
+
+	test("415 - Nome da imagem ok, porém mimetype incorreto", async () => {
+		const form = new FormData();
+		form.append("fotoPerfil", fs.createReadStream(`${process.cwd()}/assets/toji.jpg`), { contentType: "text/plain" });
+		const res = await api({
+			method: "PATCH",
+			url: "/user/update-image",
+			headers: {
+				authorization: `Bearer ${process.env.REFRESH_TOKEN}`,
+				...form.getHeaders()
+			},
+			data: form
+		});
+
+		expect(res.status).toBe(415);
+		expect(res.data).toBe("Unsupported Media Type");
+	});
+
+	test("415 - Extensao é jpg mas o conteudo é inválido (buffer criado antes da requisição sem header de arquivo)", async () => {
+		const form = new FormData();
+		form.append("fotoPerfil", Buffer.from("isso é um arquivo txt"), { filename: "test.jpg", contentType: "image/jpeg" });
+		const res = await api({
+			method: "PATCH",
+			url: "/user/update-image",
+			headers: {
+				authorization: `Bearer ${process.env.REFRESH_TOKEN}`,
+				...form.getHeaders()
+			},
+			data: form
+		});
+
+		expect(res.status).toBe(415);
+		expect(res.data).toBe("Unsupported Media Type");
+	});
+
+	test("415 - Extensao é jpg mas o conteudo é inválido (arquivo criado e escrito como txt porém renomeado com .jpg)", async () => {
+		const form = new FormData();
+		form.append("fotoPerfil", fs.createReadStream(`${process.cwd()}/assets/text.jpg`));
+		const res = await api({
+			method: "PATCH",
+			url: "/user/update-image",
+			headers: {
+				authorization: `Bearer ${process.env.REFRESH_TOKEN}`,
+				...form.getHeaders()
+			},
+			data: form
+		});
+
+		expect(res.status).toBe(415);
+		expect(res.data).toBe("Unsupported Media Type");
 	});
 });
