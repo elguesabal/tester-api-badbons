@@ -16,7 +16,8 @@
     "/notifications": "jest --verbose test/profile/notifications.test.js",
     "/game-history": "jest --verbose test/profile/game-history.test.js",
     "/swap-credentials": "jest --verbose test/profile/swap-credentials.test.js",
-    "/user/treinos": "jest --verbose test/home/user-treinos.test.js"
+    "/user/treinos": "jest --verbose test/home/user-treinos.test.js",
+    "/presence-list": "jest --verbose test/home/presence-list.test.js"
   },
   "keywords": [],
   "author": "",
