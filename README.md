@@ -55,4 +55,6 @@ Comando usado para testar apenas uma rota específica.
     - /game-history
 
 - Home
+    - /presence-student
+    - /presence-list
     - /user/treinos

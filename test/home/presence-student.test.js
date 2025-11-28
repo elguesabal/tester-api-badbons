@@ -2,74 +2,121 @@ const { api } = require("../../index.js");
 
 /**
  * @author VAMPETA
- * @brief ROTA QUE RETORNA A LISTA DE PRESENCA
- * @method GET
- * @route /presence-list
+ * @brief ROTA QUE O CLIENTE DEVE INFORMAR SE ELE VAI AO TREINO OU NAO
+ * @method PATCH
+ * @route /presence-student
  * @warning ESSE TESTE NECESSECITA DE 1 VARIAVEL DE AMBIENTE
  * @property {string} REFRESH_TOKEN TOKEN DE AUTENTICACAO DO USUARIO
 */
-describe("GET /presence-list", () => {
-	beforeAll(() => {
+describe("PATCH /presence-student", () => {
+	beforeAll(async() => {
 		expect(process.env.REFRESH_TOKEN).toBeDefined();
-	});
-
-	test("200 - Requisição feita corretamente", async () => {
-		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+		await api({
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
-			params: {
-				date: "08/01/2026"
+			data: {
+				presence: false
+			}
+		});
+	});
+
+	test("204 - Requisição feita corretamente", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				presence: true
 			}
 		});
 
-		expect(res.status).toBe(200);
-		expect(res.data).toMatchObject({
-			teacher: expect.any(String),
-			address: expect.any(String),
-			start: expect.any(String),
-			end: expect.any(String),
-			confirmedPresence: expect.any(Boolean),
-			confirmedStudents: expect.any(Array)
-		});
-		for (const confirmedStudent of res.data.confirmedStudents) expect(confirmedStudent).toEqual(expect.any(String));
+		expect(res.status).toBe(204);
+		expect(res.data).toBe("");
 	});
 
-	test("200 - O parâmetro 'date' é uma data válida porém já passou", async () => {
+	test("400 - Body não foi enviado", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
-			},
-			params: {
-				date: "21/12/2024"
 			}
 		});
 
-		expect(res.status).toBe(200);
-		expect(res.data).toMatchObject({
-			teacher: expect.any(String),
-			address: expect.any(String),
-			start: expect.any(String),
-			end: expect.any(String),
-			confirmedPresence: expect.any(Boolean),
-			confirmedStudents: expect.any(Array)
-		});
-		for (const confirmedStudent of res.data.confirmedStudents) expect(confirmedStudent).toEqual(expect.any(String));
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
 	});
-
-	test("400 - 'date' não é passado", async () => {
+	
+	test("400 - Body é null", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
-			params: {
+			data: null
+		});
 
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body é um array", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: []
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body é uma string", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: "string"
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Body não contém 'presence'", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'presence' é null", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				presence: null
 			}
 		});
 
@@ -77,15 +124,15 @@ describe("GET /presence-list", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
-	test("400 - 'date' é passado vazio", async () => {
+	test("400 - 'presence' é um objeto", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
-			params: {
-				date: ""
+			data: {
+				presence: {}
 			}
 		});
 
@@ -93,15 +140,15 @@ describe("GET /presence-list", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
-	test("400 - 'date' é inválido", async () => {
+	test("400 - 'presence' é um array", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
-			params: {
-				date: "data inválida"
+			data: {
+				presence: []
 			}
 		});
 
@@ -109,15 +156,15 @@ describe("GET /presence-list", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
-	test("400 - Campo 'date' segue o padrão DD-MM-AAAA", async () => {
+	test("400 - 'presence' é um número", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
-			params: {
-				date: "08-01-2026"
+			data: {
+				presence: 42
 			}
 		});
 
@@ -125,47 +172,15 @@ describe("GET /presence-list", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
-	test("400 - Campo 'date' segue o padrão AAAA-MM-DD", async () => {
+	test("400 - 'presence' é enviado vazio", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
-			params: {
-				date: "2026-01-08"
-			}
-		});
-
-		expect(res.status).toBe(400);
-		expect(res.data).toBe("Bad Request");
-	});
-
-	test("400 - Campo 'date' segue o padrão AAAA/MM/DD", async () => {
-		const res = await api({
-			method: "GET",
-			url: "/presence-list",
-			headers: {
-				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
-			},
-			params: {
-				date: "2026/01/08"
-			}
-		});
-
-		expect(res.status).toBe(400);
-		expect(res.data).toBe("Bad Request");
-	});
-
-	test("400 - Campo 'date' segue o padrão MM/DD/AAAA (Pode funcionar em alguns casos que o dia é menor que 12, mas de forma erronea)", async () => {
-		const res = await api({
-			method: "GET",
-			url: "/presence-list",
-			headers: {
-				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
-			},
-			params: {
-				date: "12/21/2027"
+			data: {
+				presence: ""
 			}
 		});
 
@@ -175,10 +190,10 @@ describe("GET /presence-list", () => {
 
 	test("401 - 'Authorization' não foi enviado", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
-			params: {
-				date: "08/01/2026"
+			method: "PATCH",
+			url: "/presence-student",
+			data: {
+				presence: true
 			}
 		});
 
@@ -188,13 +203,13 @@ describe("GET /presence-list", () => {
 
 	test("401 - O campo 'Authorization' é null", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: null
 			},
-			params: {
-				date: "08/01/2026"
+			data: {
+				presence: true
 			}
 		});
 
@@ -204,13 +219,13 @@ describe("GET /presence-list", () => {
 
 	test("401 - O campo 'Authorization' está vazio", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: ""
 			},
-			params: {
-				date: "08/01/2026"
+			data: {
+				presence: true
 			}
 		});
 
@@ -220,13 +235,13 @@ describe("GET /presence-list", () => {
 
 	test("401 - O campo 'Authorization' é um objeto", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: {}
 			},
-			params: {
-				date: "08/01/2026"
+			data: {
+				presence: true
 			}
 		});
 
@@ -236,13 +251,13 @@ describe("GET /presence-list", () => {
 
 	test("401 - O campo 'Authorization' é um array", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: []
 			},
-			params: {
-				date: "08/01/2026"
+			data: {
+				presence: true
 			}
 		});
 
@@ -252,13 +267,13 @@ describe("GET /presence-list", () => {
 
 	test("401 - O campo 'Authorization' é um número", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: 42
 			},
-			params: {
-				date: "08/01/2026"
+			data: {
+				presence: true
 			}
 		});
 
@@ -268,13 +283,13 @@ describe("GET /presence-list", () => {
 
 	test("401 - 'Authorization' não contém o formato 'Bearer <token>'", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: process.env.REFRESH_TOKEN
 			},
-			params: {
-				date: "08/01/2026"
+			data: {
+				presence: true
 			}
 		});
 
@@ -284,13 +299,13 @@ describe("GET /presence-list", () => {
 
 	test("401 - O token está vazio", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: "Bearer "
 			},
-			params: {
-				date: "08/01/2026"
+			data: {
+				presence: true
 			}
 		});
 
@@ -300,13 +315,13 @@ describe("GET /presence-list", () => {
 
 	test("401 - Token é inválido", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: "Bearer token inválido"
 			},
-			params: {
-				date: "08/01/2026"
+			data: {
+				presence: true
 			}
 		});
 
@@ -316,8 +331,8 @@ describe("GET /presence-list", () => {
 
 	test("401 - 'Authorization' inválido e query não enviado (testa se query é lido sem o cliente estar autenticado)", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: "Bearer token inválido"
 			}
@@ -327,19 +342,19 @@ describe("GET /presence-list", () => {
 		expect(res.data).toBe("Unauthorized");
 	});
 
-	test("404 - O campo 'date' corresponde a um dia em que o aluno não tem treino", async () => {
+	test("409 - Requisição feita corretamente, porém o status de presença já está definido como true", async () => {
 		const res = await api({
-			method: "GET",
-			url: "/presence-list",
+			method: "PATCH",
+			url: "/presence-student",
 			headers: {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
-			params: {
-				date: "09/01/2026"
+			data: {
+				presence: true
 			}
 		});
 
-		expect(res.status).toBe(404);
-		expect(res.data).toBe("Not Found");
+		expect(res.status).toBe(409);
+		expect(res.data).toBe("Conflict");
 	});
 });

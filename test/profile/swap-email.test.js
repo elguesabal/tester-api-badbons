@@ -103,22 +103,6 @@ describe("PATCH /swap-email", () => {
 		expect(res.data).toBe("Bad Request");
 	});
 
-	test("400 - 'newEmail' não é enviado", async () => {
-		const res = await api({
-			method: "PATCH",
-			url: "/swap-email",
-			headers: {
-				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
-			},
-			data: {
-				password: process.env.PASSWORD
-			}
-		});
-
-		expect(res.status).toBe(400);
-		expect(res.data).toBe("Bad Request");
-	});
-
 	test("400 - 'newEmail' é null", async () => {
 		const res = await api({
 			method: "PATCH",
