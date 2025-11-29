@@ -18,6 +18,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
+				date: "08/01/2026",
 				presence: false
 			}
 		});
@@ -31,6 +32,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
+				date: "08/01/2026",
 				presence: true
 			}
 		});
@@ -101,7 +103,9 @@ describe("PATCH /presence-student", () => {
 			headers: {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
-			data: {}
+			data: {
+				date: "08/01/2026"
+			}
 		});
 
 		expect(res.status).toBe(400);
@@ -116,6 +120,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
+				date: "08/01/2026",
 				presence: null
 			}
 		});
@@ -132,6 +137,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
+				date: "08/01/2026",
 				presence: {}
 			}
 		});
@@ -148,6 +154,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
+				date: "08/01/2026",
 				presence: []
 			}
 		});
@@ -164,6 +171,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
+				date: "08/01/2026",
 				presence: 42
 			}
 		});
@@ -180,7 +188,177 @@ describe("PATCH /presence-student", () => {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
+				date: "08/01/2026",
 				presence: ""
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Não contém 'date'", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				presence: true
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'date' é null", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				date: null,
+				presence: true
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'date' é um objeto", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				date: {},
+				presence: true
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'date' é um array", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				date: [],
+				presence: true
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'date' é um número", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				date: 42,
+				presence: true
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - 'date' é enviado vazio", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				date: "",
+				presence: true
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Campo 'date' segue o padrão DD-MM-AAAA", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				date: "08-01-2026",
+				presence: true
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Campo 'date' segue o padrão AAAA-MM-DD", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				date: "2026-01-08",
+				presence: true
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Campo 'date' segue o padrão AAAA/MM/DD", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				date: "2026/01/08",
+				presence: true
+			}
+		});
+
+		expect(res.status).toBe(400);
+		expect(res.data).toBe("Bad Request");
+	});
+
+	test("400 - Campo 'date' segue o padrão MM/DD/AAAA (Pode funcionar em alguns casos que o dia é menor que 12, mas de forma erronea)", async () => {
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				date: "12/21/2027",
+				presence: true
 			}
 		});
 
@@ -193,6 +371,7 @@ describe("PATCH /presence-student", () => {
 			method: "PATCH",
 			url: "/presence-student",
 			data: {
+				date: "08/01/2026",
 				presence: true
 			}
 		});
@@ -209,6 +388,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: null
 			},
 			data: {
+				date: "08/01/2026",
 				presence: true
 			}
 		});
@@ -225,6 +405,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: ""
 			},
 			data: {
+				date: "08/01/2026",
 				presence: true
 			}
 		});
@@ -241,6 +422,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: {}
 			},
 			data: {
+				date: "08/01/2026",
 				presence: true
 			}
 		});
@@ -257,6 +439,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: []
 			},
 			data: {
+				date: "08/01/2026",
 				presence: true
 			}
 		});
@@ -273,6 +456,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: 42
 			},
 			data: {
+				date: "08/01/2026",
 				presence: true
 			}
 		});
@@ -289,6 +473,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: process.env.REFRESH_TOKEN
 			},
 			data: {
+				date: "08/01/2026",
 				presence: true
 			}
 		});
@@ -305,6 +490,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: "Bearer "
 			},
 			data: {
+				date: "08/01/2026",
 				presence: true
 			}
 		});
@@ -321,6 +507,7 @@ describe("PATCH /presence-student", () => {
 				Authorization: "Bearer token inválido"
 			},
 			data: {
+				date: "08/01/2026",
 				presence: true
 			}
 		});
@@ -329,7 +516,7 @@ describe("PATCH /presence-student", () => {
 		expect(res.data).toBe("Unauthorized");
 	});
 
-	test("401 - 'Authorization' inválido e query não enviado (testa se query é lido sem o cliente estar autenticado)", async () => {
+	test("401 - 'Authorization' inválido e body não enviado (testa se query é lido sem o cliente estar autenticado)", async () => {
 		const res = await api({
 			method: "PATCH",
 			url: "/presence-student",
@@ -350,11 +537,32 @@ describe("PATCH /presence-student", () => {
 				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
 			},
 			data: {
+				date: "08/01/2026",
 				presence: true
 			}
 		});
 
 		expect(res.status).toBe(409);
 		expect(res.data).toBe("Conflict");
+	});
+
+
+
+
+	test("999 - O campo 'date' é uma data que já passou", async () => { // PAREI AKI
+		const res = await api({
+			method: "PATCH",
+			url: "/presence-student",
+			headers: {
+				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+			},
+			data: {
+				date: "07/12/1989",
+				presence: true
+			}
+		});
+
+		expect(res.status).toBe(999);
+		expect(res.data).toBe("");
 	});
 });

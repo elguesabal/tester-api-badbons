@@ -242,7 +242,7 @@ describe("PATCH /user/update-image", () => {
 		expect(res.data).toBe("Unauthorized");
 	});
 
-	test("413 - Imagem excede é maior que 5MB", async () => {
+	test("413 - Imagem excede é maior que 4MB", async () => {
 		const form = new FormData();
 		form.append("fotoPerfil", fs.createReadStream(`${process.cwd()}/assets/5MB.png`));
 		const res = await api({
