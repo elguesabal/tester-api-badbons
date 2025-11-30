@@ -9,7 +9,7 @@ const { api } = require("../../index.js");
  * @property {string} REFRESH_TOKEN TOKEN DE AUTENTICACAO DO USUARIO
 */
 describe("PATCH /presence-student", () => {
-	beforeAll(async() => {
+	beforeAll(async () => {
 		expect(process.env.REFRESH_TOKEN).toBeDefined();
 		await api({
 			method: "PATCH",
@@ -23,6 +23,20 @@ describe("PATCH /presence-student", () => {
 			}
 		});
 	});
+
+	// beforeEach(async () => {			// TENHO Q GARANTIR Q ANTES DE CADA TESTE O PRESENCE ESTEJA COMO FALSE		// PAREI AKI
+	// 	await api({
+	// 		method: "PATCH",
+	// 		url: "/presence-student",
+	// 		headers: {
+	// 			Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+	// 		},
+	// 		data: {
+	// 			date: "08/01/2026",
+	// 			presence: false
+	// 		}
+	// 	});
+	// });
 
 	test("204 - Requisição feita corretamente", async () => {
 		const res = await api({
@@ -53,7 +67,7 @@ describe("PATCH /presence-student", () => {
 		expect(res.status).toBe(400);
 		expect(res.data).toBe("Bad Request");
 	});
-	
+
 	test("400 - Body é null", async () => {
 		const res = await api({
 			method: "PATCH",
@@ -546,10 +560,7 @@ describe("PATCH /presence-student", () => {
 		expect(res.data).toBe("Conflict");
 	});
 
-
-
-
-	test("999 - O campo 'date' é uma data que já passou", async () => { // PAREI AKI
+	test("409 - O campo 'date' é uma data que já passou", async () => {
 		const res = await api({
 			method: "PATCH",
 			url: "/presence-student",
@@ -562,7 +573,7 @@ describe("PATCH /presence-student", () => {
 			}
 		});
 
-		expect(res.status).toBe(999);
-		expect(res.data).toBe("");
+		expect(res.status).toBe(409);
+		expect(res.data).toBe("Conflict");
 	});
 });
