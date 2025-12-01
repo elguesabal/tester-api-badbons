@@ -11,32 +11,36 @@ const { api } = require("../../index.js");
 describe("PATCH /presence-student", () => {
 	beforeAll(async () => {
 		expect(process.env.REFRESH_TOKEN).toBeDefined();
-		await api({
-			method: "PATCH",
-			url: "/presence-student",
-			headers: {
-				Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
-			},
-			data: {
-				date: "08/01/2026",
-				presence: false
-			}
-		});
 	});
 
-	// beforeEach(async () => {			// TENHO Q GARANTIR Q ANTES DE CADA TESTE O PRESENCE ESTEJA COMO FALSE		// PAREI AKI
-	// 	await api({
-	// 		method: "PATCH",
-	// 		url: "/presence-student",
-	// 		headers: {
-	// 			Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
-	// 		},
-	// 		data: {
-	// 			date: "08/01/2026",
-	// 			presence: false
-	// 		}
-	// 	});
-	// });
+	beforeEach(async () => {
+		if (expect.getState().currentTestName.includes("204 - Requisição feita corretamente")) {
+			await api({
+				method: "PATCH",
+				url: "/presence-student",
+				headers: {
+					Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+				},
+				data: {
+					date: "08/01/2026",
+					presence: false
+				}
+			});
+		}
+		if (expect.getState().currentTestName.includes("409 - Requisição feita corretamente, porém o status de presença já está definido como true")) {
+			await api({
+				method: "PATCH",
+				url: "/presence-student",
+				headers: {
+					Authorization: `Bearer ${process.env.REFRESH_TOKEN}`
+				},
+				data: {
+					date: "08/01/2026",
+					presence: true
+				}
+			});
+		}
+	});
 
 	test("204 - Requisição feita corretamente", async () => {
 		const res = await api({
