@@ -9,7 +9,9 @@ const { api } = require("../../index.js");
  * @property {string} REFRESH_TOKEN TOKEN DO USUARIO
 */
 describe("POST /auth/login-token", () => {
-	expect(process.env.REFRESH_TOKEN).toBeDefined();
+	beforeAll(async () => {
+		expect(process.env.REFRESH_TOKEN).toBeDefined();
+	});
 
 	test("204 - 'Authorization' contém um token válido", async () => {
 		const res = await api({

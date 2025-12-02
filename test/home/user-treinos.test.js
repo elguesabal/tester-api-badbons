@@ -9,7 +9,9 @@ const { api } = require("../../index.js");
  * @property {string} REFRESH_TOKEN TOKEN DE AUTENTICACAO DO USUARIO
 */
 describe("GET /user/treinos", () => {
-	expect(process.env.REFRESH_TOKEN).toBeDefined();
+	beforeAll(async () => {
+		expect(process.env.REFRESH_TOKEN).toBeDefined();
+	});
 
 	test("200 - O token do usuário é válido", async () => {
 		const res = await api({

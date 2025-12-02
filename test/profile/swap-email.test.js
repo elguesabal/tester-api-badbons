@@ -11,9 +11,11 @@ const { api } = require("../../index.js");
  * @property {string} REFRESH_TOKEN TOKEN DE AUTENTICACAO DO USUARIO
 */
 describe("PATCH /swap-email", () => {
-	expect(process.env.REFRESH_TOKEN).toBeDefined();
-	expect(process.env.EMAIL).toBeDefined();
-	expect(process.env.PASSWORD).toBeDefined();
+	beforeAll(async () => {
+		expect(process.env.REFRESH_TOKEN).toBeDefined();
+		expect(process.env.EMAIL).toBeDefined();
+		expect(process.env.PASSWORD).toBeDefined();
+	});
 
 	test("204 - 'authorization', 'newEmail' e 'password' são enviadas corretamente", async () => {
 		const res = await api({

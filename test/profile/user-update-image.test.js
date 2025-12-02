@@ -11,7 +11,9 @@ const fs = require("fs");
  * @property {string} REFRESH_TOKEN TOKEN DE AUTENTICACAO DO USUARIO
 */
 describe("PATCH /user/update-image", () => {
-	expect(process.env.REFRESH_TOKEN).toBeDefined();
+	beforeAll(async () => {
+		expect(process.env.REFRESH_TOKEN).toBeDefined();
+	});
 
 	test("204 - Imagem atualizada corretamente", async () => {
 		const form = new FormData();

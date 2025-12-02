@@ -10,8 +10,10 @@ const { api } = require("../../index.js");
  * @property {string} REFRESH_TOKEN TOKEN DE AUTENTICACAO DO USUARIO
 */
 describe("PATCH /swap-password", () => {
-	expect(process.env.REFRESH_TOKEN).toBeDefined();
-	expect(process.env.PASSWORD).toBeDefined();
+	beforeAll(async () => {
+		expect(process.env.REFRESH_TOKEN).toBeDefined();
+		expect(process.env.PASSWORD).toBeDefined();
+	});
 
 	test("204 - 'authorization', 'newPassword' e 'password' são enviadas corretamente", async () => {
 		const res = await api({
