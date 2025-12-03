@@ -43,6 +43,7 @@ Comando usado para testar apenas uma rota específica.
 - Welcome
     - /ping
     - /auth/login
+    - /credentials
     - /auth/login-token
 
 - Profile

@@ -8,6 +8,7 @@
     "general": "jest --verbose test/general.test.js",
     "/ping": "jest --verbose test/wellcome/ping.test.js",
     "/auth/login": "jest --verbose test/wellcome/auth-login.test.js",
+    "/credentials": "jest --verbose test/wellcome/credentials.test.js",
     "/auth/login-token": "jest --verbose test/wellcome/auth-login-token.test.js",
     "/user/update-image": "jest --verbose test/profile/user-update-image.test.js",
     "/swap-email": "jest --verbose test/profile/swap-email.test.js",
