@@ -44,4 +44,118 @@ describe("GET /credentials", () => {
 			}
 		});
 	});
+
+	test("401 - 'Authorization' não foi enviado", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/credentials"
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é null", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/credentials",
+			headers: {
+				Authorization: null
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' está vazio", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/credentials",
+			headers: {
+				Authorization: ""
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é um objeto", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/credentials",
+			headers: {
+				Authorization: {}
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é um array", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/credentials",
+			headers: {
+				Authorization: []
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O campo 'Authorization' é um número", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/credentials",
+			headers: {
+				Authorization: 42
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - 'Authorization' não contém o formato 'Bearer <token>'", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/credentials",
+			headers: {
+				Authorization: process.env.REFRESH_TOKEN
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - O token está vazio", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/credentials",
+			headers: {
+				Authorization: "Bearer "
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
+
+	test("401 - Token é inválido", async () => {
+		const res = await api({
+			method: "GET",
+			url: "/credentials",
+			headers: {
+				Authorization: "Bearer token inválido"
+			}
+		});
+
+		expect(res.status).toBe(401);
+		expect(res.data).toBe("Unauthorized");
+	});
 });
