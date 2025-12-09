@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --verbose --coverage",
-    "general": "jest --verbose test/general.test.js",
     "/ping": "jest --verbose test/wellcome/ping.test.js",
     "/auth/login": "jest --verbose test/wellcome/auth-login.test.js",
     "/credentials": "jest --verbose test/wellcome/credentials.test.js",
